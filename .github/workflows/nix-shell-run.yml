@@ -22,9 +22,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Use GitHub Token
-        run: echo ${{ secrets.GH_TOKEN }}
-      
+      - name: Use GitHub Token OR .env (act -s ...)
+        run: |
+        if [ -z "$GH_TOKEN" ]; then
+          echo "Running on GitHub Actions"
+          echo ${{ secrets.GH_TOKEN }}
+        else
+          echo "Running locally with act"
+          echo $GH_TOKEN
+
       - name: Run time-share workload
         run: |
           actions-batch             \
