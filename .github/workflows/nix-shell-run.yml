@@ -24,19 +24,19 @@ jobs:
 
       - name: Use GitHub Token OR .env (act -s ...)
         run: |
-        if [ -z "$GH_TOKEN" ]; then
-          echo "Running on GitHub Actions"
-          echo ${{ secrets.GH_TOKEN }}
-        else
-          echo "Running locally with act"
-          echo $GH_TOKEN
+          if [ -z "$GH_TOKEN" ]; then
+            echo "Running on GitHub Actions"
+            echo ${{ secrets.GH_TOKEN }}
+          else
+            echo "Running locally with act"
+            echo $GH_TOKEN
 
       - name: Run time-share workload
         run: |
           actions-batch             \
             --private               \
             --owner lessuselesss    \
-            --token-file [ \
+            --token-file            \
             --runs-on ubuntu-latest \
             --file examples/cowsay.sh
           # git clone https://github.com/alyraffauf/cosmic-nixos-iso && cd cosmic-nixos-iso 
@@ -45,7 +45,7 @@ jobs:
       #   run:  |
       #     mkdir -p /result/iso
       #     nix  --experimental-features 'nix-command flakes' build github.com:alyraffauf/cosmic-nixos-iso#nixosConfigurations.cosmicIso.config.system.build.isoImage
-  
+
       # - name: Upload ISO artifact
       #   uses: actions/download-artifact@v4.2.1
       #   with:
@@ -65,49 +65,4 @@ jobs:
             sleep 1
           done) &
           curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T $(cat peer1) $SECRET $RELAY
-          #powershell '[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; &$([scriptblock]::Create((New-Object System.Net.WebClient).DownloadString("https://lets.tunshell.com/init.ps1"))) '"T $(cat peer1) $SECRET $RELAY"
-# jobs:
-#   build:
-#     runs-on: macos-15
-    
-#     defaults:
-#       run:
-#         working-directory: scripts
-    
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: DeterminateSystems/nix-installer-action@main
-
-#       - name: Install Dependencies and Build Screenpipe
-#         run: |
-          # curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-          # brew install pkg-config ffmpeg jq cmake wget
-          
-          # sudo xcodebuild -license
-          # xcodebuild -runFirstLaunch
-          
-          # curl -fsSL https://bun.sh/install | bash
-          # git clone https://github.com/mediar-ai/screenpipe
-
-          # cd screenpipe
-          # cargo build --release --features metal
-          
-          # cd screenpipe-app-tauri
-          # bun install
-          # bun tauri build
-          # chmod +x ./build-screenpipe.sh && ./build-screenpipe.sh
-          
-      - name: Enable Shell Access
-        if: ${{ always() && github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
-        run: |
-          set -x
-          RELAY=relay.tunshell.com
-          SECRET=0000000000000000000000
-          KEYS=$(curl -sSf -X POST https://relay.tunshell.com/api/sessions); echo $KEYS | jq -r '.peer1_key' > peer1; echo $KEYS | jq -r '.peer2_key' > peer2;
-          (while true; do
-            echo "Connect to GitHub Actions node using: sh <(curl -sSf https://lets.tunshell.com/init.sh) L $(cat peer2) 0000000000000000000000 $RELAY"
-            echo "Or: https://tunshell.com/term#$(cat peer2),$SECRET,$RELAY"
-            sleep 1
-          done) &
-          curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T $(cat peer1) $SECRET $RELAY
-          #powershell '[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; &$([scriptblock]::Create((New-Object System.Net.WebClient).DownloadString("https://lets.tunshell.com/init.ps1"))) '"T $(cat peer1) $SECRET $RELAY"
+          #powershell '[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; &$([scriptblock]::Create((New-Object System.Net.WebClient).DownloadString("htt[...]
